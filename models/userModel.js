@@ -5,9 +5,14 @@ const getAllUsers = async()=>{
     return  res.rows
 }
 
-const createUser = async(name, email)=>{
-    const res = await pool.query("INSERT INTO users (name,email) VALUES ($1, $2) RETURNING *", [name,email]);
+const createUser = async({ name, email, password, phone, role })=>{
+    const res = await pool.query("INSERT INTO users (name, email, password, phone, role) VALUES ($1, $2, $3, $4,$5) RETURNING *", [name, email, password, phone, role]);
     return res.rows[0]
 }
 
-module.exports = {getAllUsers, createUser}
+const findUser = async(identifier)=>{
+const res = await pool.query("SELECT * FROM users where email = $1 OR phone = $1", [identifier])
+return res.rows[0];
+}
+
+module.exports = {getAllUsers, createUser, findUser}

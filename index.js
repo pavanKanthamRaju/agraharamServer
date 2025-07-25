@@ -3,6 +3,7 @@ const cors = require('cors');
 const pool = require('./config/db');
 require('dotenv').config();
 const userRoutes = require("./routes/userRoutes")
+const authRouts = require("./routes/authRouts")
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -18,6 +19,7 @@ app.use(express.json());
 
 //Routes 
 app.use('/api/users', userRoutes)
+app.use('/api/auth',authRouts)
 app.get('/', (req, res) => res.send('API is working 🚀'));
 
 // Start the server
