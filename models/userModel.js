@@ -10,9 +10,9 @@ const createUser = async({ name, email, password, phone, role })=>{
     return res.rows[0]
 }
 
-const findUser = async(identifier)=>{
-const res = await pool.query("SELECT * FROM users where email = $1 OR phone = $1", [identifier])
-return res.rows[0];
+const findUser = async (identifier) => {
+    const res = await pool.query("SELECT * FROM users WHERE email = $1 OR phone = $1", [identifier]);
+    return res.rows[0];
 }
 
 module.exports = {getAllUsers, createUser, findUser}

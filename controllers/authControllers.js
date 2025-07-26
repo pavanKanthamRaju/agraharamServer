@@ -14,9 +14,14 @@ const signUp = async (req, res) => {
         return res.status(400).json({ error: 'All fields are required' })
     }
     try {
-        const existinfUser = await User.findUser(email) || await User.findUser(phone)
-        if (existinfUser) {
-            return res.status(409).json({ error: 'user allready exists' })
+        const existingUser = await User.findUser(email);
+        if (existingUser) {
+            return res.status(409).json({ error: 'User with this email already exists' });
+        }
+
+        const existingUserByPhone = await User.findUser(phone);
+        if (existingUserByPhone) {
+            return res.status(409).json({ error: 'User with this phone number already exists' });
         }
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = User.createUser({ name, email, phone, role, password: hashedPassword })
@@ -37,7 +42,7 @@ const login = async (req, res) => {
         const user = await User.findUser(identifier)
         if (!user) return res.status(401).json({ error: "invalid credentials..." })
         const isMatch = await bcrypt.compare(password, user.password)
-        if (!isMatch) return res.status(401).json({ erroe: "invalid credentials..." })
+        if (!isMatch) return res.status(401).json({ error: "invalid credentials..." })
         const token = generateToken(user);
         res.status(200).json({ message: "Login successful..", user, token })
 
@@ -54,7 +59,7 @@ const googleLogin = async (req, res) => {
         const ticket = await client.verifyIdToken(
             {
                 idToken: token,
-                audience: process.eventNames.GOOGLE_CLIENT_ID
+                audience: process.env.GOOGLE_CLIENT_ID
             }
         )
         const payload = ticket.getPayload();
@@ -67,10 +72,10 @@ const googleLogin = async (req, res) => {
                 email,
                 phone: "",
                 role: "user",
-                password: ""
+                password: null
             })
         }
-        const jwtToken = jwt.sign({ id: user.id }, process.eventNames.JWT_SECRET, { expiresIn: "7d" })
+        const jwtToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: "7d" })
         res.status(200).json({ user, toke: jwtToken })
     } catch (err) {
         console.error("Google Login Error", err.message)
