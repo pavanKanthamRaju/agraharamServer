@@ -19,9 +19,9 @@ const getUsers = async(req, res)=>{
     }
 }
 const createUser = async(req, res)=>{
-    const {name, email} = req.body
+    const {name, email, password, phone, role} = req.body
     try{
-        const createdUser = await User.createUser(name,email)
+        const createdUser = await User.createUser({name, email, password, phone, role})
         res.status(200).json({user: createdUser})
         await redisClient.del('users'); 
     }catch(err){
