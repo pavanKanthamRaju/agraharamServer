@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const User = require("../models/userModel");
+const jwt = require("jsonwebtoken");
 const { generateToken } = require("../utils/jwt");
 const { OAuth2Client } = require("google-auth-library");
 const pool = require("../config/db");
@@ -14,19 +15,18 @@ const signUp = async (req, res) => {
         return res.status(400).json({ error: 'All fields are required' })
     }
     try {
-        const existingUser = await User.findUser(email);
+        const existingUser = await User.findUser(email, phone);
         if (existingUser) {
-            return res.status(409).json({ error: 'User with this email already exists' });
-        }
-
-        const existingUserByPhone = await User.findUser(phone);
-        if (existingUserByPhone) {
-            return res.status(409).json({ error: 'User with this phone number already exists' });
+            if (existingUser.email === email) {
+                return res.status(409).json({ error: 'User with this email already exists' });
+            }
+            if (existingUser.phone === phone) {
+                return res.status(409).json({ error: 'User with this phone number already exists' });
+            }
         }
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = User.createUser({ name, email, phone, role, password: hashedPassword })
-        res.status(201).json({ message: "user successfully created", user: newUser })
-
+        const newUser = await User.createUser({ name, email, phone, role, password: hashedPassword });
+        res.status(201).json({ message: "user successfully created", user: newUser });
     }
     catch (err) {
         console.log(`somthing went wrong : ${err}`)
@@ -76,7 +76,7 @@ const googleLogin = async (req, res) => {
             })
         }
         const jwtToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: "7d" })
-        res.status(200).json({ user, toke: jwtToken })
+        res.status(200).json({ user, token: jwtToken })
     } catch (err) {
         console.error("Google Login Error", err.message)
         res.status(401).json({ error: "Invalid google Token" })

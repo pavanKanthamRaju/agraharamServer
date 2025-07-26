@@ -10,8 +10,8 @@ const createUser = async({ name, email, password, phone, role })=>{
     return res.rows[0]
 }
 
-const findUser = async (identifier) => {
-    const res = await pool.query("SELECT * FROM users WHERE email = $1 OR phone = $1", [identifier]);
+const findUser = async (email, phone) => {
+    const res = await pool.query("SELECT * FROM users WHERE email = $1 OR phone = $2", [email, phone]);
     return res.rows[0];
 }
 
