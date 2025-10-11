@@ -41,7 +41,9 @@ const login = async (req, res) => {
     try {
         const user = await User.findUser(identifier)
         if (!user) return res.status(401).json({ error: "invalid credentials..." })
-        const isMatch = await bcrypt.compare(password, user.password)
+
+        // const isMatch = await bcrypt.compare(password, user.password)
+         const isMatch = await bcrypt.compare(password, user.password)
         if (!isMatch) return res.status(401).json({ error: "invalid credentials..." })
         const token = generateToken(user);
         res.status(200).json({ message: "Login successful..", user, token })
@@ -54,16 +56,12 @@ const login = async (req, res) => {
 }
 
 const googleLogin = async (req, res) => {
-    const { token } = req.body;
+    const { userInfo } = req.body; // contains verified Google info
+    const { email, name, picture, sub } = userInfo;
+    console.log("userInfo....."+userInfo)
     try {
-        const ticket = await client.verifyIdToken(
-            {
-                idToken: token,
-                audience: process.env.GOOGLE_CLIENT_ID
-            }
-        )
-        const payload = ticket.getPayload();
-        const { email, name } = payload
+     
+    
         let user = await User.findUser(email);
 
         if (!user) {
@@ -72,11 +70,14 @@ const googleLogin = async (req, res) => {
                 email,
                 phone: "",
                 role: "user",
-                password: null
+                password: null,
+                profile_image: picture || null,
+                provider:"google",
+                google_id:sub
             })
         }
         const jwtToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: "7d" })
-        res.status(200).json({ user, token: jwtToken })
+        res.status(200).json({ user, token: jwtToken, message: "Google login successful", })
     } catch (err) {
         console.error("Google Login Error", err.message)
         res.status(401).json({ error: "Invalid google Token" })
