@@ -5,6 +5,8 @@ require('dotenv').config();
 const userRoutes = require("./routes/userRoutes")
 const authRouts = require("./routes/authRouts")
 const poojasRouts = require("./routes/poojaRoutes")
+const paymentRoutes = require("./routes/paymentRoutes")
+const orderRoutes = require("./routes/orderRoutes")
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -16,12 +18,14 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(express.json());
-
+ 
 
 //Routes 
 app.use('/api/users', userRoutes)
 app.use('/api/auth',authRouts)
 app.use('/api/poojas', poojasRouts)
+app.use('/api/payment', paymentRoutes)
+app.use('/api/orders', orderRoutes)
 app.get('/', (req, res) => res.send('API is working 🚀'));
 
 // Start the server
