@@ -13,4 +13,20 @@ const pool = require("../config/db")
     );
     return result.rows[0];
   };
-  module.exports = {getAllPoojas, createPooja}
+  const modifyPooja = async (id, pooja) => {
+    const { name, price, duration, description, image } = pooja;
+    const result = await pool.query(
+      `UPDATE poojas
+       SET name = $1,
+           base_price = $2,
+           duration = $3,
+           description = $4,
+           image_url = $5
+       WHERE id = $6
+       RETURNING *`,
+      [name, price, duration, description, image, id]
+    );
+    return result.rows[0];
+  };
+  
+  module.exports = {getAllPoojas, createPooja, modifyPooja}

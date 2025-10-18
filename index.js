@@ -12,7 +12,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const corsOptions = {
   origin: '*', // Or your frontend URL like 'http://localhost:5173'
-  methods: ['GET', 'POST', 'OPTIONS'],
+  methods: ['GET', 'POST', 'OPTIONS','PUT', 'DELETE'],
   allowedHeaders: ['Content-Type'],
 }; 
 

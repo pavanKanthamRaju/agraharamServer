@@ -36,7 +36,32 @@ const getOrders = async (user_id) => {
     console.log(`Fetched ${result.rows.length} orders for user ${user_id}`);
     return result.rows; // ✅ return all orders
   };
+ const getTotalOrders = async (req, res) => {
+    try {
+      const result = await pool.query(
+        `
+        SELECT 
+        id AS order_id,
+        user_id,
+        pooja_id,
+        total_amount,
+        booking_date,
+        booking_time,
+        payment_status,
+        address,
+        created_at
+      FROM orders
+      ORDER BY created_at DESC;
+      
+
+        `
+      );
   
-  module.exports = { createOrderRecord, getOrders };
-  
-module.exports = { createOrderRecord, getOrders };
+      return result.rows; 
+    } catch (err) {
+      console.error("Error fetching orders:", err);
+      res.status(500).json({ error: "Failed to fetch orders" });
+    }
+  };
+  module.exports = { createOrderRecord, getOrders, getTotalOrders };
+

@@ -1,5 +1,5 @@
 
-const { createOrderRecord, getOrders } = require("../models/orderModel");
+const { createOrderRecord, getOrders, getTotalOrders } = require("../models/orderModel");
 
  const placeOrder = async (req, res) => {
   try {
@@ -22,15 +22,23 @@ const { createOrderRecord, getOrders } = require("../models/orderModel");
 const getUserOrders = async (req, res) => {
     try {
       const { user_id } = req.params;
-  
-     
       const result = await getOrders(user_id);
       console.log("orders from controller...." ,result)
       res.json({ success: true, orders: result });
     } catch (error) {
-      console.error("Error fetching user orders:", error);
-      res.status(500).json({ success: false, message: "Failed to fetch orders" });
+      console.error("Error fetching user orders for user:", error);
+      res.status(500).json({ success: false, message: "Failed to fetch orders from users" });
+    }
+  };
+  const getAllOrders = async (req, res) => {
+    try {
+      const result = await getTotalOrders();
+      console.log("orders from controller...." ,result)
+      res.json({ success: true, orders: result });
+    } catch (error) {
+      console.error("Error fetching user orders fron all order:", error);
+      res.status(500).json({ success: false, message: "Failed to fetch orders from all orders" });
     }
   };
   
-module.exports = { placeOrder, getUserOrders };
+module.exports = { placeOrder, getUserOrders, getAllOrders };
