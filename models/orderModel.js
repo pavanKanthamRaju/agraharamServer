@@ -41,17 +41,21 @@ const getOrders = async (user_id) => {
       const result = await pool.query(
         `
         SELECT 
-        id AS order_id,
-        user_id,
-        pooja_id,
-        total_amount,
-        booking_date,
-        booking_time,
-        payment_status,
-        address,
-        created_at
-      FROM orders
-      ORDER BY created_at DESC;
+  o.id AS order_id,
+  o.user_id,
+  u.name AS user_name,
+  o.pooja_id,
+  p.name AS pooja_name,
+  o.total_amount,
+  o.booking_date,
+  o.booking_time,
+  o.payment_status,
+  o.address,
+  o.created_at
+FROM orders o
+LEFT JOIN users u ON o.user_id = u.id
+LEFT JOIN poojas p ON o.pooja_id = p.id
+ORDER BY o.created_at DESC;
       
 
         `

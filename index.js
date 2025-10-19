@@ -7,6 +7,7 @@ const authRouts = require("./routes/authRouts")
 const poojasRouts = require("./routes/poojaRoutes")
 const paymentRoutes = require("./routes/paymentRoutes")
 const orderRoutes = require("./routes/orderRoutes")
+const itemRoutes = require("./routes/itemRoutes")
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -26,6 +27,7 @@ app.use('/api/auth',authRouts)
 app.use('/api/poojas', poojasRouts)
 app.use('/api/payment', paymentRoutes)
 app.use('/api/orders', orderRoutes)
+app.use('/api/items', itemRoutes)
 app.get('/', (req, res) => res.send('API is working 🚀'));
 
 // Start the server
