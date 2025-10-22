@@ -2,6 +2,8 @@ const crypto = require("crypto");
 const razorpay = require("../config/razorpay");
 const { createOrderRecord } = require("../models/orderModel");
 const { createPaymentRecord } = require("../models/paymentModel");
+const { sendSms } = require("../utils/twilioClient");  // ✅ corrected import name
+
 
  const createOrder = async (req, res) => {
   try {
@@ -31,6 +33,7 @@ const { createPaymentRecord } = require("../models/paymentModel");
       total_amount,
       booking_date,
       booking_time,
+      phone_number,
     address} = req.body;
 
     const sign = razorpay_order_id + "|" + razorpay_payment_id;
@@ -50,9 +53,11 @@ const { createPaymentRecord } = require("../models/paymentModel");
       booking_date,
       booking_time,
       "paid",
-      address
+      address,
+      phone_number
     );
-
+    const message = `Hi! Your order #${order.id} has been successfully placed with Agraharam. Total amount : ₹${order.total_amount/100}. We'll update you when it's confirmed.`;
+    console.log("twilio message is..", message)
     // ✅ Create payment record
     await createPaymentRecord(
       order.id,
@@ -60,6 +65,14 @@ const { createPaymentRecord } = require("../models/paymentModel");
       razorpay_payment_id,
       "success"
     );
+    try {
+      const twResp = await sendSms({ to: `+91${phone_number}`, body: message });
+      console.log("SMS sent:", twResp.sid);
+    } catch (smsErr) {
+      console.error("❌ SMS failed:", smsErr.message);
+      // Optional: log error for retry later
+    }
+  console.log("orderer creation has been done order id is "+order.id)
     res.json({
       success: true,
       message: "Payment verified and stored successfully",

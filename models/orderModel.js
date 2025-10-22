@@ -1,12 +1,11 @@
 const pool = require("../config/db");
-
-const createOrderRecord = async (user_id, pooja_id, total_amount, booking_date, booking_time, payment_status,address) => {
+const createOrderRecord = async (user_id, pooja_id, total_amount, booking_date, booking_time, payment_status,address,phone_number) => {
   const query = `
-    INSERT INTO orders (user_id, pooja_id, total_amount, booking_date, booking_time, payment_status,address)
-    VALUES ($1, $2, $3, $4, $5, $6,$7)
+    INSERT INTO orders (user_id, pooja_id, total_amount, booking_date, booking_time, payment_status,address,phone_number)
+    VALUES ($1, $2, $3, $4, $5, $6,$7,$8)
     RETURNING *;
   `;
-  const values = [user_id, pooja_id, total_amount, booking_date, booking_time, payment_status, address];
+  const values = [user_id, pooja_id, total_amount, booking_date, booking_time, payment_status, address,phone_number];
   const result = await pool.query(query, values);
   return result.rows[0];
 };
@@ -51,6 +50,7 @@ const getOrders = async (user_id) => {
   o.booking_time,
   o.payment_status,
   o.address,
+  o.phone_number,
   o.created_at
 FROM orders o
 LEFT JOIN users u ON o.user_id = u.id
