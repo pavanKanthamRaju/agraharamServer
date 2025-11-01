@@ -1,4 +1,5 @@
-const pool = require('../config/db'); // your PostgreSQL pool connection
+const pool = require('../config/db.config'); // your PostgreSQL pool connection
+
 
 // ➕ Create Announcement
 const createAnnouncement = async (name, type, description) => {

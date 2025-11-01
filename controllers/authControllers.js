@@ -41,7 +41,8 @@ const login = async (req, res) => {
     try {
         const user = await User.findUser(identifier)
         if (!user) return res.status(401).json({ error: "invalid credentials..." })
-
+        console.log("User Object Keys (Supabase):", Object.keys(user));
+        console.log("Password Hash Value (Supabase):", user.password); // Check if this is undefined/null
         // const isMatch = await bcrypt.compare(password, user.password)
          const isMatch = await bcrypt.compare(password, user.password)
         if (!isMatch) return res.status(401).json({ error: "invalid credentials..." })

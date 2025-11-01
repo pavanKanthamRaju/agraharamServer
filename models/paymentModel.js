@@ -1,4 +1,4 @@
-const pool = require("../config/db");
+const pool = require("../config/db.config");
 
 const createPaymentRecord = async (order_id, amount, transaction_id, status) => {
   const query = `

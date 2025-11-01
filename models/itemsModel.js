@@ -1,4 +1,4 @@
-const pool = require("../config/db");
+const pool = require("../config/db.config");
 
 const createItem = async ({ item_name, description }) => {
     const query = `

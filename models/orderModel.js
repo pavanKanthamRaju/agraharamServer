@@ -1,4 +1,4 @@
-const pool = require("../config/db");
+const pool = require("../config/db.config");
 const createOrderRecord = async (user_id, pooja_id, total_amount, booking_date, booking_time, payment_status,address,phone_number) => {
   const query = `
     INSERT INTO orders (user_id, pooja_id, total_amount, booking_date, booking_time, payment_status,address,phone_number)
@@ -28,7 +28,7 @@ const getOrders = async (user_id) => {
       JOIN payments p ON o.id = p.order_id
       JOIN poojas pooja ON o.pooja_id = pooja.id
       WHERE o.user_id = $1
-      ORDER BY o.created_at DESC;
+      ORDER BY o.created_at DESC
     `;
   
     const result = await pool.query(query, [user_id]);
@@ -55,7 +55,7 @@ const getOrders = async (user_id) => {
 FROM orders o
 LEFT JOIN users u ON o.user_id = u.id
 LEFT JOIN poojas p ON o.pooja_id = p.id
-ORDER BY o.created_at DESC;
+ORDER BY o.created_at DESC
       
 
         `
