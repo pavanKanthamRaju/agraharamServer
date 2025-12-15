@@ -13,7 +13,7 @@ const pool = require("../config/db.config");
 // Get items for a specific pooja
  const getItemsByPooja = async (pooja_id) => {
   const result = await pool.query(`
-    SELECT pi.id, pi.quantity, pi.price, i.id as item_id, i.name
+    SELECT pi.id, pi.quantity, pi.price, pi.units, i.id as item_id, i.name
     FROM pooja_items pi
     JOIN items i ON pi.item_id = i.id
     WHERE pi.pooja_id = $1
@@ -22,12 +22,12 @@ const pool = require("../config/db.config");
 };
 
 // Add pooja item
- const addPoojaItem = async ({ pooja_id, item_id, quantity,price }) => {
+ const addPoojaItem = async ({ pooja_id, item_id, quantity,price, units }) => {
   const result = await pool.query(`
-    INSERT INTO pooja_items (pooja_id, item_id, quantity, price)
-    VALUES ($1, $2, $3, $4)
+    INSERT INTO pooja_items (pooja_id, item_id, quantity, price, units)
+    VALUES ($1, $2, $3, $4, $5)
     RETURNING *
-  `, [pooja_id, item_id, quantity,price]);
+  `, [pooja_id, item_id, quantity,price, units]);
   return result.rows[0];
 };
 
