@@ -1,7 +1,7 @@
 const pool = require("../config/db.config");
 const createOrderRecord = async (user_id, pooja_id, total_amount, booking_date, booking_time, payment_status,address,phone_number) => {
   const query = `
-    INSERT INTO "orders" (user_id, pooja_id, total_amount, booking_date, booking_time, payment_status,address,phone_number)
+    INSERT INTO "orders" ("user_id", "pooja_id", "total_amount", "booking_date", "booking_time", "payment_status","address","phone_number")
     VALUES ($1, $2, $3, $4, $5, $6,$7,$8)
     RETURNING *;
   `;
