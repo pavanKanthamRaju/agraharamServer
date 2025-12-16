@@ -46,7 +46,13 @@ const supabaseAdapter = {
     // Mimics pool.query(text, values)
     query: async (text, values = []) => {
         // 1. Substitute parameters (remains the same)
-        const rawSql = substituteParams(text, values);
+
+        // 1. Clean the text string first
+const cleanedText = text.trim(); // <-- ADD THIS LINE
+
+// 2. Substitute parameters using the cleaned string
+const rawSql = substituteParams(cleanedText, values);
+        // const rawSql = substituteParams(text, values);
     
         // 2. Execute the raw SQL via the custom RPC function (remains the same)
         const { data, error } = await supabase.rpc('execute_sql', {
