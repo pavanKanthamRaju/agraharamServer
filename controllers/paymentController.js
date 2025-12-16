@@ -82,7 +82,7 @@ const { sendSms } = require("../utils/twilioClient");  // ✅ corrected import n
       res.status(400).json({ success: false, message: "Invalid signature" });
     }
   } catch (error) {
-    res.status(500).json({ message: "Payment verification failed"+error });
+    res.status(500).json({ message: "Payment verification failed"+JSON.stringify(error) });
   }
 };
 
