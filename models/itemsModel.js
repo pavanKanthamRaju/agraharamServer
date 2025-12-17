@@ -10,6 +10,8 @@ const createItem = async ({ item_name, description,default_quantity, price, unit
     image
   }
   const result = await pool.insert("items", payload);
+  console.log("result..."+ result.name)
+  return result;
     // const query = `
     //   INSERT INTO items (name, description, default_quantity, price,units, image)
     //   VALUES ($1, $2, $3, $4, $5, $6)
@@ -17,7 +19,7 @@ const createItem = async ({ item_name, description,default_quantity, price, unit
     // `;
     // const values = [item_name, description, default_quantity, price, units, image];
     // const result = await pool.query(query, values);
-    return result.rows[0];
+    // return result.rows[0];
   };
 
 
