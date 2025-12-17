@@ -82,13 +82,14 @@ const rawSql = substituteParams(cleanedText, values);
     // Allows access to the native Supabase client if needed for other operations
     native: supabase, 
     insert: async (table, data) => {
+        console.log("payload is.."+JSON.stringify(data));
         const { data: result, error } = await supabase
           .from(table)
           .insert([data])
           .select()
           .single();
     
-        if (error) throw error;
+        if (error) throw new Error(JSON.stringify(error));
         return result;
       }
 };
