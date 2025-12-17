@@ -81,6 +81,16 @@ const rawSql = substituteParams(cleanedText, values);
     },
     // Allows access to the native Supabase client if needed for other operations
     native: supabase, 
+    insert: async (table, data) => {
+        const { data: result, error } = await supabase
+          .from(table)
+          .insert([data])
+          .select()
+          .single();
+    
+        if (error) throw error;
+        return result;
+      }
 };
 
 module.exports = supabaseAdapter;
