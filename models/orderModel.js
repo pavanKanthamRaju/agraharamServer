@@ -1,12 +1,24 @@
 const pool = require("../config/db.config");
+
 const createOrderRecord = async (user_id, pooja_id, total_amount, booking_date, booking_time, payment_status,address,phone_number) => {
-  const query = `
-    INSERT INTO "orders" ("user_id", "pooja_id", "total_amount", "booking_date", "booking_time", "payment_status","address","phone_number")
-    VALUES ($1, $2, $3, $4, $5, $6,$7,$8)
-    RETURNING *;
-  `;
-  const values = [user_id, pooja_id, total_amount, booking_date, booking_time, payment_status, address,phone_number];
-  const result = await pool.query(query, values);
+  const payload=(
+    user_id,
+    pooja_id,
+    total_amount,
+    booking_date,
+    booking_time,
+    payment_status,
+    address,
+    phone_number
+  )
+  // const query = `
+  //   INSERT INTO "orders" ("user_id", "pooja_id", "total_amount", "booking_date", "booking_time", "payment_status","address","phone_number")
+  //   VALUES ($1, $2, $3, $4, $5, $6,$7,$8)
+  //   RETURNING *;
+  // `;
+  // const values = [user_id, pooja_id, total_amount, booking_date, booking_time, payment_status, address,phone_number];
+  // const result = await pool.query(query, values);
+  const result = db.insert("orders", payload);
   return result.rows[0];
 };
 const getOrders = async (user_id) => {
