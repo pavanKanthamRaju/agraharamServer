@@ -91,7 +91,30 @@ const rawSql = substituteParams(cleanedText, values);
     
         if (error) throw new Error(JSON.stringify(error));
         return result;
-      }
+      },
+      update: async (table, id, data) => {
+        console.log("payload is.."+JSON.stringify(data));
+        const { data: result, error } = await supabase
+          .from(table)
+          .insert([data])
+          .eq('id', id) // Filter: Where 'id' column equals the id passed in
+        .select()
+        .single();  
+    
+        if (error) throw new Error(JSON.stringify(error));
+        return result;
+      },
+      delete: async (table, id) => {
+        const { data: result, error } = await supabase
+          .from(table)
+          .insert()
+          .eq('id', id) // Filter: Where 'id' column equals the id passed in
+        .select()
+        .single();  
+        if (error) throw new Error(JSON.stringify(error));
+        return result;
+      },
+      
 };
 
 module.exports = supabaseAdapter;
