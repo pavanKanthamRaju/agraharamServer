@@ -11,7 +11,8 @@ const createOrderRecord = async (user_id, pooja_id, total_amount, booking_date, 
     address,
     phone_number
   }
-  const result = pool.insert("orders", payload);
+  const result = await pool.insert("orders", payload);
+  console.log("ORDER result..."+JSON.stringify(result))
   return result
   // const query = `
   //   INSERT INTO "orders" ("user_id", "pooja_id", "total_amount", "booking_date", "booking_time", "payment_status","address","phone_number")
