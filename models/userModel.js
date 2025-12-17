@@ -1,13 +1,17 @@
 const pool = require('../config/db.config')
 
-const getAllUsers = async()=>{
+const getAllUsers = async () => {
     const res = await pool.query("SELECT * FROM users")
-    return  res.rows
+    return res.rows
 }
 
-const createUser = async({ name, email, password, phone, role, profile_image, provider, google_id })=>{
-    const res = await pool.query("INSERT INTO users (name, email, password, phone, role, profile_image, provider, google_id) VALUES ($1, $2, $3, $4, $5,$6, $7, $8) RETURNING *", [name, email, password, phone, role, profile_image, provider, google_id]);
-    return res.rows[0]
+const createUser = async ({ name, email, password, phone, role, profile_image, provider, google_id }) => {
+    const payload={ name, email, password, phone, role, profile_image, provider, google_id }
+    const result = pool.insert("users",payload);
+    return result;
+
+    // const res = await pool.query("INSERT INTO users (name, email, password, phone, role, profile_image, provider, google_id) VALUES ($1, $2, $3, $4, $5,$6, $7, $8) RETURNING *", [name, email, password, phone, role, profile_image, provider, google_id]);
+    // return res.rows[0]
 }
 
 const findUser = async (email, phone) => {
@@ -15,4 +19,4 @@ const findUser = async (email, phone) => {
     return res.rows[0];
 }
 
-module.exports = {getAllUsers, createUser, findUser}
+module.exports = { getAllUsers, createUser, findUser }
