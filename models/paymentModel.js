@@ -8,7 +8,8 @@ const createPaymentRecord = async (order_id, amount, transaction_id, status) => 
     status,
     paid_at: NOW()
   }
-  const result = pool.insert("payments", payload);
+  const result = await pool.insert("payments", payload);
+  console.log("PAYMENT result..."+JSON.stringify(result))
   return result
   // const query = `
   //   INSERT INTO payments (order_id, amount, transaction_id, status, paid_at)
