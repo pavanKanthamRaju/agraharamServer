@@ -3,13 +3,20 @@ const pool = require('../config/db.config'); // your PostgreSQL pool connection
 
 // ➕ Create Announcement
 const createAnnouncement = async (name, type, description) => {
-  const result = await pool.query(
-    `INSERT INTO announcements (name, type, description)
-     VALUES ($1, $2, $3)
-     RETURNING *`,
-    [name, type, description]
-  );
-  return result.rows[0];
+const payload ={
+  name,
+  type,
+  description
+}
+const result = await pool.insert("announcements", payload);
+return result
+  // const result = await pool.query(
+  //   `INSERT INTO announcements (name, type, description)
+  //    VALUES ($1, $2, $3)
+  //    RETURNING *`,
+  //   [name, type, description]
+  // );
+  // return result.rows[0];
 };
 
 // 📋 Get All Announcements

@@ -7,26 +7,46 @@ const pool = require("../config/db.config")
 
  const createPooja = async (pooja) => {
     const { name, price, duration, description, image } = pooja;
-    const result = await pool.query(
-      'INSERT INTO poojas (name, base_price, duration, description, image_url) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-      [name, price, duration, description, image]
-    );
-    return result.rows[0];
+    const payload = {
+      name,
+      base_price: price,
+      duration,
+      description,
+      image_url:image
+    }
+    const result = await pool.insert("poojas", payload);
+    console.log("result..."+ result.name)
+    return result;
+    // const result = await pool.query(
+    //   'INSERT INTO poojas (name, base_price, duration, description, image_url) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+    //   [name, price, duration, description, image]
+    // );
+    // return result.rows[0];
   };
   const modifyPooja = async (id, pooja) => {
     const { name, price, duration, description, image } = pooja;
-    const result = await pool.query(
-      `UPDATE poojas
-       SET name = $1,
-           base_price = $2,
-           duration = $3,
-           description = $4,
-           image_url = $5
-       WHERE id = $6
-       RETURNING *`,
-      [name, price, duration, description, image, id]
-    );
-    return result.rows[0];
+    const payload = {
+      name,
+      base_price: price,
+      duration,
+      description,
+      image_url:image
+    }
+    const result = await pool.update("poojas", id, payload);
+    console.log("result..."+ result.name)
+    return result;
+    // const result = await pool.query(
+    //   `UPDATE poojas
+    //    SET name = $1,
+    //        base_price = $2,
+    //        duration = $3,
+    //        description = $4,
+    //        image_url = $5
+    //    WHERE id = $6
+    //    RETURNING *`,
+    //   [name, price, duration, description, image, id]
+    // );
+    // return result.rows[0];
   };
   
   module.exports = {getAllPoojas, createPooja, modifyPooja}
