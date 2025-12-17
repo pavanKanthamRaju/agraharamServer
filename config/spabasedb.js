@@ -93,27 +93,37 @@ const rawSql = substituteParams(cleanedText, values);
         return result;
       },
       update: async (table, id, data) => {
-        console.log("payload is.."+JSON.stringify(data));
+        console.log("Updating table:", table, "ID:", id);
+        console.log("Payload is.." + JSON.stringify(data));
+    
         const { data: result, error } = await supabase
           .from(table)
-          .insert([data])
-          .eq('id', id) // Filter: Where 'id' column equals the id passed in
-        .select()
-        .single();  
+          .update(data)    // Correct method for modifying existing rows
+          .eq('id', id)    // Essential filter to target the specific record
+          .select()        // Returns the updated record
+          .single();       // Ensures the result is an object, not an array
     
-        if (error) throw new Error(JSON.stringify(error));
+        if (error) {
+            console.error("Supabase Update Error:", error);
+            throw new Error(JSON.stringify(error));
+        }
+    
         return result;
-      },
+    },
       delete: async (table, id) => {
         const { data: result, error } = await supabase
           .from(table)
-          .insert()
-          .eq('id', id) // Filter: Where 'id' column equals the id passed in
-        .select()
-        .single();  
-        if (error) throw new Error(JSON.stringify(error));
-        return result;
-      },
+          .delete()           // Use .delete() instead of .insert()
+          .eq('id', id)       // Filters for the specific row to remove
+          .select()           // Optional: allows you to see the record you just deleted
+          .single();          // Returns the object instead of an array
+    
+        if (error) {
+            throw new Error(`Delete Error: ${JSON.stringify(error)}`);
+        }
+        
+        return result; 
+    }
       
 };
 
