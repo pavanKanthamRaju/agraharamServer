@@ -6,7 +6,7 @@ const createPaymentRecord = async (order_id, amount, transaction_id, status) => 
     amount,
     transaction_id,
     status,
-    paid_at: NOW()
+    paid_at: new Date().toISOString()
   }
   const result = await pool.insert("payments", payload);
   console.log("PAYMENT result..."+JSON.stringify(result))
