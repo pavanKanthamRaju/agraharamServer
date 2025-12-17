@@ -128,6 +128,7 @@ const rawSql = substituteParams(cleanedText, values);
         // Otherwise, return the deleted object.
         return result && result.length > 0 ? result[0] : null;
       
-};
+}
+}
 
 module.exports = supabaseAdapter;
