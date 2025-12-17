@@ -110,20 +110,23 @@ const rawSql = substituteParams(cleanedText, values);
     
         return result;
     },
-      delete: async (table, id) => {
+    delete: async (table, id) => {
+        console.log("Deleting table:", table, "ID:", id);
+        
         const { data: result, error } = await supabase
           .from(table)
-          .delete()           // Use .delete() instead of .insert()
-          .eq('id', id)       // Filters for the specific row to remove
-          .select()           // Optional: allows you to see the record you just deleted
-          .single();          // Returns the object instead of an array
+          .delete()
+          .eq('id', id)
+          .select(); // Remove .single() to avoid the JSON error
     
         if (error) {
+            console.error("Supabase Delete Error:", error);
             throw new Error(`Delete Error: ${JSON.stringify(error)}`);
         }
         
-        return result; 
-    }
+        // If result is empty (length 0), return null. 
+        // Otherwise, return the deleted object.
+        return result && result.length > 0 ? result[0] : null;
       
 };
 
