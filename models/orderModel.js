@@ -18,7 +18,7 @@ const createOrderRecord = async (user_id, pooja_id, total_amount, booking_date, 
   // `;
   // const values = [user_id, pooja_id, total_amount, booking_date, booking_time, payment_status, address,phone_number];
   // const result = await pool.query(query, values);
-  const result = db.insert("orders", payload);
+  const result = pool.insert("orders", payload);
   return result.rows[0];
 };
 const getOrders = async (user_id) => {
