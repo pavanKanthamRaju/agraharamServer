@@ -1,4 +1,4 @@
-const { createItem, getAllItems, updateItem, deleteItem } = require("../models/itemsModel");
+const { createItem, getAllItems, updateItem, deleteItem, findItem } = require("../models/itemsModel");
 
 // POST /api/items
 const addItem = async (req, res) => {
@@ -8,7 +8,10 @@ const addItem = async (req, res) => {
     if (!item_name) {
       return res.status(400).json({ success: false, message: "Item name is required" });
     }
-
+    const existingItem = findItem(item_name)
+    if (existingItem) {
+      return res.status(400).json({ success: false, message: "Item allready existed please enter new Item" });
+    }
     const newItem = await createItem({ item_name, description, default_quantity, price, units, image });
     res.status(201).json({ success: true, item: newItem });
   } catch (err) {

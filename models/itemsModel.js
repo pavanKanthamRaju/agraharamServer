@@ -62,7 +62,11 @@ const updateItem = async (id, { item_name, description, default_quantity, price,
     // const result = await pool.query(query, [id]);
     // return result.rows[0];
     const result = await pool.delete("items",id);
-    return result
+    return result;
   };
+  const findItem = async (name) =>{
+const result  = await pool.findItem(name);
+return result;
+  }
 
-module.exports ={createItem,getAllItems, updateItem, deleteItem}
+module.exports ={createItem,getAllItems, updateItem, deleteItem, findItem}
