@@ -13,7 +13,7 @@ const pool = require("../config/db.config");
 // Get items for a specific pooja
  const getItemsByPooja = async (pooja_id) => {
   const result = await pool.query(`
-    SELECT pi.id, pi.quantity, pi.price, pi.units, i.id as item_id, i.name
+    SELECT pi.id, pi.quantity, pi.price, pi.units, i.id as item_id, i.name, i.image
     FROM pooja_items pi
     JOIN items i ON pi.item_id = i.id
     WHERE pi.pooja_id = $1
